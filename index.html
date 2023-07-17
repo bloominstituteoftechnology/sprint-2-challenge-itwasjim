@@ -28,7 +28,6 @@
     #outcome {
       font-size: 3rem;
     }
-
   </style>
 </head>
 
@@ -87,6 +86,30 @@
       // 🌟 HINT: to confirm the existence of a prop, check that its value is not undefined
     }
 
+    function profileActivation(profile, reason) {
+      if (!profile || typeof profile.active === 'undefined') {
+        return "impossible to ascertain status";
+      }
+
+      if (profile.active) {
+        if (typeof profile.reason !== 'undefined') {
+          return "confirm status manually";
+        } else {
+          profile.active = false;
+          profile.reason = reason;
+          return profile;
+        }
+      } else {
+        if (typeof profile.reason === 'undefined') {
+          return "confirm status manually";
+        } else {
+          profile.active = true;
+          delete profile.reason;
+          return profile;
+        }
+      }
+    }
+
     // 👉 CHALLENGE 2
     function mineSweeper() {
       // 🧠 mineSweeper takes a grid as its first argument, and coordinates x and y as the second and third args
@@ -108,6 +131,21 @@
       //    * If the x or y coordinates are under 1 or over 3, return the string "invalid coordinates"
     }
 
+    function mineSweeper(grid, x, y) {
+      if (x < 1 || x > 3 || y < 1 || y > 3) {
+        return "invalid coordinates";
+      }
+
+      const square = grid[y - 1][x - 1];
+
+      if (square === "🟥") {
+        return "🟥 💀";
+      } else {
+        return "🟦 🥳";
+      }
+    }
+
+
     // 👉 CHALLENGE 3
     function booleanize() {
       // 🧠 booleanize takes an object as its single argument, which can have any number of properties
@@ -118,6 +156,28 @@
       // 🧠 Edge cases:
       //    * If a property name exceeds 9 characters, return the string "shorten all prop names to 9 chars or less"
       // 🌟 HINT: careful not to perform any unintended changes on the object
+    }
+
+    function booleanize(obj) {
+      const result = {};
+
+      for (const key in obj) {
+        if (key.length > 9) {
+          return "shorten all prop names to 9 chars or less";
+        }
+
+        const value = obj[key];
+
+        if (value === 0) {
+          result[key] = false;
+        } else if (value === 1) {
+          result[key] = true;
+        } else if (value !== null) {
+          result[key] = value;
+        }
+      }
+
+      return result;
     }
 
     // 👉 CHALLENGE 4
@@ -135,6 +195,24 @@
       // 🌟 HINT: useful array methods to use are `push`, `indexOf`, `split`, `join`
     }
 
+    function scrub(text, forbidden) {
+      const words = text.split(" ");
+      const scrubbedWords = [];
+
+      for (const word of words) {
+        if (forbidden.includes(word)) {
+          scrubbedWords.push("x".repeat(word.length));
+        } else {
+          scrubbedWords.push(word);
+        }
+      }
+
+      return scrubbedWords.join(" ");
+    }
+
+
+
+
     // 👉 CHALLENGE 5
     function normalizePhoneNumber() {
       // 🧠 normalizePhoneNumber takes a string as its only argument, representing a ten-digit number
@@ -150,6 +228,26 @@
       // 🌟 HINT: if you'd rather loop forwards, use `shift` instead of `pop`
     }
 
+    function normalizePhoneNumber(number) {
+      if (number.length !== 10) {
+        return "type a 10-digit number";
+      }
+
+      let formattedNumber = "(XXX) XXX-XXXX";
+
+      for (let i = 0; i < number.length; i++) {
+        const digit = number[i];
+
+        if (isNaN(digit)) {
+          return "invalid phone number";
+        }
+
+        formattedNumber = formattedNumber.replace("X", digit);
+      }
+
+      return formattedNumber;
+    }
+
     // 👉 CHALLENGE 6 (bonus, NOT graded)
     function diceRolls() {
       // 🧠 diceRolls takes no arguments and returns a number
@@ -158,6 +256,27 @@
       // 🌟 HINT: research using `Math.random` to obtain a number from 1 to 6
       // 🌟 HINT: use `while(true)` to throw the dice indefinitely, but avoid an infinite loop by making sure to break out eventually
       // 🌟 HINT: you need to keep track of the total number of throws, as well as how many sixes in a row
+    }
+
+    function diceRolls() {
+      let throws = 0; // Keep track of the total number of throws
+      let consecutiveSixes = 0; // Keep track of consecutive sixes
+
+      while (true) {
+        const diceResult = Math.floor(Math.random() * 6) + 1;
+
+        throws++;
+
+        if (diceResult === 6) {
+          consecutiveSixes++;
+        } else {
+          consecutiveSixes = 0;
+        }
+
+        if (consecutiveSixes === 3) {
+          return throws;
+        }
+      }
     }
 
     // 🧪 TESTS, do not make any changes below this line ===================
